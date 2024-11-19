@@ -1,61 +1,57 @@
 import React, {useState} from 'react';
 import {View, FlatList, TextInput, TouchableOpacity, Text} from 'react-native';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {StyleSheet} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import TaskItem from '../components/taskItems/TaskItem';
+import AppStyles from '../styles/AppStyles'; // Importa tus estilos centralizados
 
 type RootStackParamList = {
   TaskList: undefined;
-  TaskDetail: {task: Task};
+  TaskDetail: {taskId: string};
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'TaskList'>;
 
-type Task = {
-  id: string;
-  title: string;
-  details?: string;
-};
+type Task = {id: string; title: string};
 
 const TaskListScreen: React.FC<Props> = ({navigation}) => {
-  const [task, setTask] = useState<string>('');
+  const [taskInput, setTaskInput] = useState<string>(''); // Renombrado para evitar conflicto
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const addTask = () => {
-    if (task.trim()) {
-      setTasks([...tasks, {id: Date.now().toString(), title: task}]);
-      setTask('');
+    if (taskInput.trim()) {
+      const newTask = {id: Date.now().toString(), title: taskInput};
+      setTasks([...tasks, newTask]);
+      setTaskInput(''); // Limpia el campo de entrada después de agregar
     }
   };
 
-  const deleteTask = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index));
+  const deleteTask = (taskId: string) => {
+    // Cambiado de `id` a `taskId` para mayor claridad
+    setTasks(tasks.filter(task => task.id !== taskId));
   };
 
-  const navigateToDetails = (task: Task) => {
-    navigation.navigate('TaskDetail', {
-      task,
-    });
+  const navigateToDetails = (taskId: string) => {
+    navigation.navigate('TaskDetail', {taskId});
   };
 
   return (
-    <View style={styles.container}>
+    <View style={AppStyles.container}>
       <TextInput
-        value={task}
-        onChangeText={setTask}
+        value={taskInput}
+        onChangeText={setTaskInput}
         placeholder="Escribe tu tarea..."
-        style={styles.input}
+        style={AppStyles.input}
       />
-      <TouchableOpacity onPress={addTask} style={styles.button}>
-        <Text style={styles.buttonText}>Añadir Tarea</Text>
+      <TouchableOpacity onPress={addTask} style={AppStyles.button}>
+        <Text style={AppStyles.buttonText}>Añadir Tarea</Text>
       </TouchableOpacity>
       <FlatList
         data={tasks}
-        renderItem={({item, index}) => (
+        renderItem={({item}: {item: Task}) => (
           <TaskItem
             task={item.title}
-            onEdit={() => navigateToDetails(item)}
-            onDelete={() => deleteTask(index)}
+            onEdit={() => navigateToDetails(item.id)}
+            onDelete={() => deleteTask(item.id)}
           />
         )}
         keyExtractor={item => item.id}
@@ -63,31 +59,5 @@ const TaskListScreen: React.FC<Props> = ({navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 16,
-    padding: 8,
-    borderRadius: 4,
-  },
-  button: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 12,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default TaskListScreen;

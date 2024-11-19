@@ -6,13 +6,13 @@ import TaskItem from '../components/taskItems/TaskItem';
 type Task = {id: string; title: string; details?: string};
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  const [task, setTask] = useState<string>('');
+  const [taskInput, setTaskInput] = useState<string>('');
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const addTask = (): void => {
-    if (task.trim()) {
-      setTasks([...tasks, {id: Date.now().toString(), title: task}]);
-      setTask('');
+    if (taskInput.trim()) {
+      setTasks([...tasks, {id: Date.now().toString(), title: taskInput}]);
+      setTaskInput('');
     }
   };
 
@@ -21,9 +21,9 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
     setTasks(newTasks);
   };
 
-  const navigateToDetails = (task: Task) => {
+  const navigateToDetails = (selectedTask: Task) => {
     navigation.navigate('TaskDetail', {
-      task,
+      task: selectedTask,
       updateTask: (updatedTask: Task) => {
         setTasks(prevTasks =>
           prevTasks.map(t => (t.id === updatedTask.id ? updatedTask : t)),
@@ -37,8 +37,8 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <Text style={AppStyles.title}>Lista de Tareas</Text>
       <TextInput
         placeholder="Escribe tu tarea..."
-        value={task}
-        onChangeText={setTask}
+        value={taskInput}
+        onChangeText={setTaskInput}
         style={AppStyles.input}
       />
       <TouchableOpacity style={AppStyles.button} onPress={addTask}>

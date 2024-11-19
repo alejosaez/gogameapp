@@ -13,16 +13,16 @@ const AppStyles = StyleSheet.create({
   },
   taskItem: {
     backgroundColor: '#fff',
-    borderRadius: 10, // Bordes redondeados
-    padding: 15, // Espaciado interno
-    marginBottom: 10, // Separación entre tareas
-    width: screenWidth - 40, // Ocupa casi todo el ancho de la pantalla
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    width: screenWidth - 40,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3, // Sombra en Android
-    alignSelf: 'center', // Centra horizontalmente
+    elevation: 3,
+    alignSelf: 'center',
   },
   taskText: {
     fontSize: 16,
@@ -57,10 +57,10 @@ const AppStyles = StyleSheet.create({
   },
   deleteButton: {
     marginLeft: 10,
-    padding: 5, // Aumenta el área táctil
+    padding: 5,
   },
   taskContent: {
-    flex: 1, // Ocupa todo el espacio restante en la fila
+    flex: 1,
   },
 });
 

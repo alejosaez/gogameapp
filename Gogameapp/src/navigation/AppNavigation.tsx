@@ -1,18 +1,23 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from '../screens/HomeScreen';
-import TaskDetailScreen from '../screens/TaskListScreen';
+import TaskListScreen from '../screens/TaskListScreen';
+import TaskDetailScreen from '../screens/TaskDetailScreent';
 
-const Stack = createStackNavigator();
+type RootStackParamList = {
+  TaskList: undefined;
+  TaskDetail: {task: {id: string; title: string; details?: string}};
+};
 
-const AppNavigator = () => {
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const AppNavigation: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="TaskList">
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
+          name="TaskList"
+          component={TaskListScreen}
           options={{title: 'Lista de Tareas'}}
         />
         <Stack.Screen
@@ -25,4 +30,4 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;
+export default AppNavigation;
